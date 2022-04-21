@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useRef, useState, useEffect} from "react";
 
 import axios from "@/APIService/axios";
-const LOGIN_URL = 'http://127.0.0.1:8000/auth/';
+const REGISTER_URL = 'http://127.0.0.1:8000/api/users/';
 
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -21,6 +21,9 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [validPassword, setValidPassword] = useState(false);
   const [passwordFocus, setPasswordFocus] = useState(false);
+
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
 
   const [errMsg, setErrMsg] = useState('');
   const [success, setSuccess] = useState(false);
@@ -45,8 +48,20 @@ const Signup = () => {
   }, [password])
 
   useEffect(() => {
+    console.log(result);
+    console.log(first_name);
+    setFirstName(result);
+  }, [first_name])
+
+  useEffect(() => {
+    console.log(result);
+    console.log(first_name);
+    setLastName(result);
+  }, [last_name])
+
+  useEffect(() => {
     setErrMsg('');
-  }, [user, password])
+  }, [user, password, first_name, last_name])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,8 +73,8 @@ const Signup = () => {
       return;
     }
     try{
-      const response = await axios.post(LOGIN_URL, 
-            JSON.stringify({username: user, password: password}), 
+      const response = await axios.post(REGISTER_URL, 
+            JSON.stringify({username: user, password: password, first_name: first_name, last_name: last_name}), 
             {
               headers: {'Content-Type': 'application/json'},
               withCredentials: true
@@ -103,6 +118,32 @@ const Signup = () => {
                     <span onClick={() => navigate("/")}>Sign In</span>
             </p>
               <form onSubmit={handleSubmit}>
+                  <label htmlFor="first_name">
+                        First Name: 
+                      </label>
+                    <input 
+                      type="text" 
+                      id="first_name"
+                      ref={userRef}
+                      autoComplete="off" 
+                      onChange={(e) => setFirstName(e.target.value)}
+                      value={first_name}
+                      required
+                    /> 
+                    <br />
+                  <label htmlFor="last_name">
+                        Last Name: 
+                      </label>
+                    <input 
+                      type="text" 
+                      id="last_name"
+                      ref={userRef}
+                      autoComplete="off" 
+                      onChange={(e) => setLastName(e.target.value)}
+                      value={last_name}
+                      required
+                    /> 
+                    <br />
                     <label htmlFor="username">
                         Email: 
                         <span className={validEmail ? "valid" : "hide"} />
