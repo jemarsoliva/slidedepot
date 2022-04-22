@@ -14,7 +14,7 @@ const Signup = () => {
   const userRef = useRef();
   const errRef = useRef();
 
-  const [user, setUser] = useState('');
+  const [email, setEmail] = useState('');
   const [validEmail, setValidEmail] = useState(false);
   const [userFocus, setUserFocus] = useState(false);
 
@@ -34,11 +34,11 @@ const Signup = () => {
   }, [])
 
   useEffect(() => {
-    const result = EMAIL_REGEX.test(user);
+    const result = EMAIL_REGEX.test(email);
     console.log(result);
-    console.log(user);
+    console.log(email);
     setValidEmail(result);
-  }, [user])
+  }, [email])
 
   useEffect(() => {
     const result = PWD_REGEX.test(password);
@@ -48,25 +48,27 @@ const Signup = () => {
   }, [password])
 
   useEffect(() => {
+    const result = first_name;
     console.log(result);
     console.log(first_name);
     setFirstName(result);
   }, [first_name])
 
   useEffect(() => {
+    const result = last_name;
     console.log(result);
-    console.log(first_name);
+    console.log(last_name);
     setLastName(result);
   }, [last_name])
 
   useEffect(() => {
     setErrMsg('');
-  }, [user, password, first_name, last_name])
+  }, [email, password, first_name, last_name])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const v1 = EMAIL_REGEX.test(user);
+    const v1 = EMAIL_REGEX.test(email);
     const v2 = PWD_REGEX.test(password);
     if (!v1 || !v2){
       setErrMsg("Unable to sign up with provided credentials.");
@@ -74,7 +76,7 @@ const Signup = () => {
     }
     try{
       const response = await axios.post(REGISTER_URL, 
-            JSON.stringify({username: user, password: password, first_name: first_name, last_name: last_name}), 
+            JSON.stringify({email: email, password: password, first_name: first_name, last_name: last_name}), 
             {
               headers: {'Content-Type': 'application/json'},
               withCredentials: true
@@ -85,7 +87,7 @@ const Signup = () => {
           console.log(JSON.stringify(response)); 
           setSuccess(true);
 
-          setUser('');
+          setEmail('');
           setPassword('');
     } catch(err){
       if(!err?.response){
@@ -95,7 +97,7 @@ const Signup = () => {
       }else if (err.response?.status === 401){
         setErrMsg('Unauthorized');
       }else {
-        setErrMsg('Login Failed');
+        setErrMsg('Register Failed');
       }
       errRef.current.focus();
     }
@@ -106,7 +108,7 @@ const Signup = () => {
         {success ? (
             <div>
               <h1>Success!</h1>
-                  <span onClick={() => navigate("/")}>Sign In</span>
+                  {/* <span onClick={() => navigate("/")}>Sign In</span> */}
             </div>
          ) : (
           <div>
@@ -147,22 +149,22 @@ const Signup = () => {
                     <label htmlFor="username">
                         Email: 
                         <span className={validEmail ? "valid" : "hide"} />
-                        <span className={validEmail || !user ? "hide" : "invalid"} />
+                        <span className={validEmail || !email ? "hide" : "invalid"} />
                       </label>
                     <input 
-                      type="text" 
+                      type="email" 
                       id="username"
                       ref={userRef}
                       autoComplete="off" 
-                      onChange={(e) => setUser(e.target.value)}
-                      value={user}
+                      onChange={(e) => setEmail(e.target.value)}
+                      value={email}
                       required
                       aria-invalid={validEmail ? "false" : "true"}
                       aria-describedby = "uidnote"
                       onFocus = {() => setPasswordFocus(true)}
                       onBlur = {() => setUserFocus(false)}
                     />
-                    <p id="uidnote" className={userFocus && user && !validEmail ? "instructions" : "offscreen"}>
+                    <p id="uidnote" className={userFocus && email && !validEmail ? "instructions" : "offscreen"}>
                     </p>
 
                     <label htmlFor="password">
@@ -185,7 +187,7 @@ const Signup = () => {
                     </p>
 
                     <button disabled = {!validEmail || !validPassword ? true : false}>
-                      Log In
+                      Sign Up
                     </button>
                 </form>
           </div>
