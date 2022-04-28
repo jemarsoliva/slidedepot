@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import {useRef, useState, useEffect, useContext} from 'react';
 import AuthContext from "@/context/AuthProvider";
+import cookie from "react-cookies";
 
 import axios from "@/APIService/axios";
 const LOGIN_URL = '/auth/';
@@ -35,7 +36,7 @@ const Login = () => {
       const response = await axios.post(LOGIN_URL, 
             JSON.stringify({username: user, password: password}), 
             {
-              headers: {'Content-Type': 'application/json'},
+              headers: {"X-CSRFToken": cookie.load('csrftoken'), 'Content-Type': 'application/json'},
               withCredentials: true
             }
           );
