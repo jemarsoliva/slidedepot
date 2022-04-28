@@ -77,6 +77,8 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 AUTH_USER_MODEL = 'main.User'
 
+AUTH_TOKEN_EXPIRY_TIME = 10
+
 ROOT_URLCONF = 'slidedepot.urls'
 
 TEMPLATES = [
