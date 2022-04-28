@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 import { useRef, useState, useEffect} from "react";
+import cookie from 'react-cookies';
+
 
 import axios from "@/APIService/axios";
 const REGISTER_URL = '/api/users/';
@@ -78,7 +80,7 @@ const Signup = () => {
       const response = await axios.post(REGISTER_URL, 
             JSON.stringify({email: email, password: password, first_name: first_name, last_name: last_name}), 
             {
-              headers: {'Content-Type': 'application/json'},
+              headers: {"X-CSRFToken": cookie.load('csrftoken'), 'Content-Type': 'application/json'},
               withCredentials: true
             }
           );
