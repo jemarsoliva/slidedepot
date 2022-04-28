@@ -56,8 +56,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = 'first_name', 'last_name', 'password'
-
+     
     def get_token(self):
+        """ get or generate a user token that is valid for
+            `settings.AUTH_TOKEN_EXPIRY_TIME`
+        """
         token, created = Token.objects.get_or_create(user=self)
         expiry_date = token.created + datetime.timedelta(
             days=settings.AUTH_TOKEN_EXPIRY_TIME)
