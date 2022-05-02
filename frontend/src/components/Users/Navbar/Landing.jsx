@@ -12,16 +12,14 @@ function Landing() {
   }
   return (
     <div className="justify-center">
-      <h1 className="text-2xl text-center font-bold underline">Welcome User</h1>
+      <h1 className="text-2xl text-center font-bold underline">Welcome User!</h1>
       <div>
-          <h1>You are Logged in!</h1>
-          <button onClickCapture={logout}>Logout</button>
+          <button 
+            className="btn-default rounded-md px-4 py-1 text-white" 
+            onClickCapture={logout}>
+              Logout
+          </button>
       </div>
-      <button
-        className="btn-default rounded-md px-4 py-1 text-white"
-        onClick={() => navigate("/")}>
-        Back
-      </button>
     </div>
   );
 }
