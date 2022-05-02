@@ -18,16 +18,16 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         return user
 
-    def update(self, instance, validated_data):
+    # def update(self, instance, validated_data):
 
-        password = validated_data.pop('password', None)
-        instance = super(RegisterSerializer, self).update(instance, validated_data)
+    #     password = validated_data.pop('password', None)
+    #     instance = super(RegisterSerializer, self).update(instance, validated_data)
 
-        if password:
-            instance.set_password(password)
-            instance.save()
+    #     if password:
+    #         instance.set_password(password)
+    #         instance.save()
 
-        return instance
+    #     return instance
 
 class ChangePasswordSerializer(serializers.Serializer):
     model = User
