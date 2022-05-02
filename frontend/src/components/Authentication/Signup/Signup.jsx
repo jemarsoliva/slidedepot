@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from "react-router-dom";
 import { useRef, useState, useEffect} from "react";
 import cookie from 'react-cookies';
+import Login from "@/components/Authentication/Login/Login";
 
 import Alert from '@mui/material/Alert';
 import InfoIcon from '@mui/icons-material/InfoOutlined';
@@ -96,6 +97,7 @@ const Signup = () => {
 
           setEmail('');
           setPassword('');
+          navigate("/login/")
     } catch(err){
       if(!err?.response){
         setErrMsg('No server Response');
@@ -114,8 +116,7 @@ const Signup = () => {
     <div className='w-screen h-screen grid place-items-center font-font'>
         {success ? (
             <div>
-            <h1>Success</h1>
-                  {/* <span onClick={() => navigate("/")}>Sign In</span> */}
+              <Login />
             </div>
          ) : (
           <div className='w-96 border border-gray-200 py-10 px-10 rounded-sm shadow-md'>
