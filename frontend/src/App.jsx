@@ -17,7 +17,6 @@ function App() {
         <Route path="/" element={<GuestGallery />} />
         <Route {...<ProtectedLogin/>} path="/login/" element={<Login />}auth={setAuth.auth} />
         <Route path="/about/" element={<About />} />
-        <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/landing/" element={<Landing />} />
         <Route path="/profile/" element={<UserProfile />} />
