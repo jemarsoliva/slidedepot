@@ -3,7 +3,7 @@ from .models import (
     User,
     Comment
 )
-class UserSerializer(serializers.ModelSerializer):
+class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
@@ -21,13 +21,21 @@ class UserSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
 
         password = validated_data.pop('password', None)
-        instance = super(UserSerializer, self).update(instance, validated_data)
+        instance = super(RegisterSerializer, self).update(instance, validated_data)
 
         if password:
             instance.set_password(password)
             instance.save()
 
         return instance
+
+class ChangePasswordSerializer(serializers.Serializer):
+    model = User
+    """
+    Serializer for password change endpoint.
+    """
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
