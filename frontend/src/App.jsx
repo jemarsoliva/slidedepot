@@ -6,6 +6,7 @@ import Landing from "@/components/Users/Navbar/Landing";
 import UserProfile from "@/pages/Users/UserProfile";
 import GuestGallery from "@/components/Guest/Gallery/GuestGallery";
 import About from "@/components/About/About";
+import ChangePassword from "@/components/settings/ChangePassword";
 import AuthContext from "@/context/AuthProvider";
 import ProtectedLogin from "@/components/Authentication/ProtectedLogin";
 
@@ -19,6 +20,7 @@ function App() {
         <Route path="/about/" element={<About />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/landing/" element={<Landing />} />
+        <Route path="/changepassword/" element={<ChangePassword />} />
         <Route path="/profile/" element={<UserProfile />} />
       </Routes>
 
