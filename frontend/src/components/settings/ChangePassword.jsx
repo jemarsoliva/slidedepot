@@ -1,73 +1,95 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import {useRef, useState, useEffect, useContext} from 'react';
-import AuthContext from "@/context/AuthProvider";
+import {useRef, useState} from 'react';
 import cookie from 'react-cookies';
 
 import axios from "@/APIService/axios";
 const PASSWORD_URL = '/api/change-password/';
 
 
-const ChangePassword = () => {
-    const navigate = useNavigate();
+export default function ChangePassword() {
+    const [user, setUser] = useState({
+    old_password: "",
+    new_password: "",
+    confirm_password: "",
+    });
 
-    const { currentUser } = useContext(AuthContext);
-    const [oldpassword, setOldPass] = useState('');
-    const [newpassword, setNewPass] = useState('');
-    const [confirmpassword, setRepeatPass] = useState('');
-
-    const token = localStorage.getItem('Token')
-
-    const data = {
-        'old_password': 'sometext',
-        'new_password1': 'othertext',
-        'new_password2': 'othertext'
+    const [errMsg, setErrMsg] = useState('');
+    const updatePass = (event) => {
+    setUser({ ...user, [event.target.name]: event.target.value });
     };
+    const submitHandler = async (e) => {
 
-    var formData = new FormData();
-
-    for(var name in data){
-        formData.append(name, data[name]);
+    e.preventDefault();
+    if(new_password === confirm_password){
+        setErrMsg("password_mismatch");
+        return;
     }
-    const headers = {
-        'Authorization': `Token ${token}`,
+    try{
+        const response = await axios.put(PASSWORD_URL, 
+              JSON.stringify({old_password: user.old_password, new_password: user.new_password}), 
+              {
+                headers: {"X-CSRFToken": cookie.load('csrftoken'), 'Content-Type': 'application/json'},
+                withCredentials: true
+              }
+            );
+            const Token = JSON.stringify(response?.data?.token);
+            // setUser({ ...user, old_password: user.old_password, new_password: user.new_password});
+            localStorage.setItem("token",Token);
+            setToken(Token)
+            console.log(user.new_password, user.confirm_password);
+            navigate("/landing/")
+            
+      } 
+        catch(err){
+            if(!err?.response){
+              setErrMsg('No server Response');
+            }else if (err.response?.status === 400){
+              setErrMsg('Unable to log in with provided credentials.');
+            }else if (err.response?.status === 401){
+              setErrMsg('Unauthorized');
+            }else {
+              setErrMsg('Update Failed');
+            }
+          }
     };
 
   return (
-    <form onSubmit={handleSubmit}>
-        <label className="my-1 font-semibold text-sm" htmlFor="username">Old Password</label>
-        <input 
-            className="form-input"
-            type="password" 
-            id="password"
-            placeholder="Old Password"
-            onChange={(e) => setOldPass(e.target.value)}
-            value={oldpassword}
-            required
-        />
-        <label className="my-1 font-semibold text-sm" htmlFor="username">New Password</label>
-        <input 
-            className="form-input"
-            type="password" 
-            id="password"
-            placeholder="New Password"
-            onChange={(e) => setNewPass(e.target.value)}
-            value={newpassword}
-            required
-        />
-        <label className="my-1 font-semibold text-sm" htmlFor="username">Confirm Password</label>
-        <input 
-            className="form-input"
-            type="password" 
-            id="password"
-            placeholder="Confirm Password"
-            onChange={(e) => setRepeatPass(e.target.value)}
-            value={confirmpassword}
-            required
-        />
-         <button className="btn btn-default btn-block mt-5">Confirm</button>
-    </form>
+      <div>
+        <form onSubmit={submitHandler}>  
+            <label className="my-1 font-semibold text-sm" htmlFor="username">Old Password</label>
+            <input 
+                id="old_password"
+                label="Old Password"
+                type="password"
+                name="old_password"
+                required
+                autoFocus
+                value={user.old_password}
+                onChange={updatePass}
+            />
+            <label className="my-1 font-semibold text-sm" htmlFor="username">New Password</label>
+            <input 
+                id="new_password"
+                label="New Password"
+                name="new_password"
+                type="password"
+                onChange={updatePass}
+                value={user.new_password}
+                required
+            />
+            <label className="my-1 font-semibold text-sm" htmlFor="username">Confirm Password</label>
+            <input 
+                id="confirm_password"
+                label="Confirm Password"
+                name="confirm_password"
+                type="confirm_password"
+                placeholder="Confirm Password"
+                onChange={updatePass}
+                value={user.confirm_password}
+                required
+            />
+            <button className="btnConfirm">Confirm</button>
+        </form>
+    </div>
   );
 };
-
-export default ChangePassword;
