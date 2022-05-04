@@ -13,7 +13,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework import status, viewsets, mixins, generics
 from rest_framework.permissions import IsAuthenticated
-
+from rest_framework.authtoken.views import ObtainAuthToken
 
 class RegisterViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, 
                         mixins.CreateModelMixin, mixins.RetrieveModelMixin,
@@ -21,6 +21,9 @@ class RegisterViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
 
     queryset = User.objects.all()
     serializer_class = RegisterSerializer
+
+class LoginView(ObtainAuthToken):
+    authentication_classes = {}
 class ChangePasswordViewset(generics.UpdateAPIView):
     serializer_class = ChangePasswordSerializer
     model = User
