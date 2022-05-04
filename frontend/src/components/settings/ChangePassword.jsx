@@ -27,16 +27,10 @@ export default function ChangePassword() {
         const response = await axios.put(PASSWORD_URL, 
               JSON.stringify({old_password: user.old_password, new_password: user.new_password}), 
               {
-                headers: {"X-CSRFToken": cookie.load('csrftoken'), 'Content-Type': 'application/json'},
-                withCredentials: true,
+                headers: {Authorization:`Token ${localStorage.getItem("token")}`, 'Content-Type': 'application/json'},
               }
             );
-            const Token = JSON.stringify(response?.data?.token);
-            // setUser({ ...user, old_password: user.old_password, new_password: user.new_password});
-            localStorage.setItem("Token",Token);
-            setToken(Token)
-            navigate("/landing/")
-            
+            const Token = JSON.stringify(response?.data?.token)
       } 
         catch(error){
             console.log(error)
