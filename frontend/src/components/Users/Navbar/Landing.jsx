@@ -9,7 +9,7 @@ function Landing() {
   const [success, setSuccess] = useState(false);
 
   const logout = () =>{
-    localStorage.removeItem("Token");
+    localStorage.removeItem("token");
     setSuccess(false);
     navigate("/");
   }
