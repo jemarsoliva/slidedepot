@@ -34,23 +34,20 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(user, password);
     try{
       const response = await axios.post(LOGIN_URL, 
             JSON.stringify({username: user, password: password}), 
             {
-              headers: {"X-CSRFToken": cookie.load('csrftoken'), 'Content-Type': 'application/json'},
+              headers:{'Content-Type': 'application/json'},
               withCredentials: true
             }
           );
-          // console.log(JSON.stringify(response?.data));
-          // console.log(JSON.stringify(response));
-          const Token = JSON.stringify(response?.data?.token);
+          const Token = response?.data?.token;
           setAuth({username, password, Token});
           setUser('');
           setPassword('');
-          // setSuccess(true);
-          localStorage.setItem("Token",Token);
+          
+          localStorage.setItem("token",Token);
           setToken(Token)
           navigate("/landing/")
           
